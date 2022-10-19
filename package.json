@@ -1,0 +1,22 @@
+{
+  "name": "rayyan-node-js-own-project-learning",
+  "version": "1.0.0",
+  "description": "rayyan own project learning",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js",
+    "debug":"ndb server.js"
+  },
+  "author": "rayyan shaikh",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "mongoose": "^6.6.5",
+    "morgan": "^1.10.0",
+    "ndb": "^1.1.5",
+    "nodemon": "^2.0.20",
+    "slugify": "^1.6.5"
+  }
+}
