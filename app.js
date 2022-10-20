@@ -2,7 +2,9 @@ const express = require('express');
 const app = express();
 const morgan = require('morgan');
 const dotenv = require('dotenv');
+const globalErrorHandler = require('./Controllers/errorController');
 const tourRoutes = require('./routes/tourRoutes');
+const usersRoutes = require('./routes/userRoutes');
 dotenv.config({
     path:'./config.env'
 });
@@ -39,6 +41,7 @@ if (process.env.NODE_ENV === 'development') {
 
 //3)routes for handling request
 app.use('/api/v1/tours',tourRoutes);
+app.use('/api/v1/users',usersRoutes);
 // app.post('/getdata',async(req,res)=>{
     
    
@@ -51,5 +54,8 @@ app.use('/api/v1/tours',tourRoutes);
 app.all('*', (req, res, next) => {
     next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
   });
+
+  app.use(globalErrorHandler);
+
 module.exports = app;
 // const PORT1 = process.dotenv.PORT;
