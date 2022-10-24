@@ -1,3 +1,6 @@
+const User = require('./../models/UserModel');
+const Validator = require('validator');
+
 exports.getAllUser=(req,res,next)=>{
     res.status(400).json({
         status: 'error',
@@ -12,10 +15,14 @@ exports.getUser =(req,res,next)=>{
     });
 }
 
-exports.createUser = (req,res,next)=>{
+exports.createUser = async (req,res,next)=>{
+
+    const user = await User.create(req.body);
     res.status(400).json({
-        status: 'error',
-        message: 'This route is not yet defined!'
+        status: 'success full register',
+        data:{
+            Users:user
+        }
     });
 }
 exports.updateUser = (req,res,next)=>{
