@@ -1,10 +1,14 @@
 const User = require('./../models/UserModel');
 const Validator = require('validator');
 
-exports.getAllUser=(req,res,next)=>{
-    res.status(400).json({
-        status: 'error',
-        message: 'This route is not yet defined!'
+exports.getAllUser=async(req,res,next)=>{
+    const allUsers = await User.find();
+
+    res.status(200).json({
+        status: 'success',
+        data:{
+            users:allUsers
+        }
     });
 }
 
