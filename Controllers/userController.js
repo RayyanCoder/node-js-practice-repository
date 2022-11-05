@@ -1,7 +1,8 @@
 const User = require('./../models/UserModel');
+const catchAsync = require('./../utils/catchAsync');
 const Validator = require('validator');
 
-exports.getAllUser=async(req,res,next)=>{
+exports.getAllUser=catchAsync(async(req,res,next)=>{
     const allUsers = await User.find();
 
     res.status(200).json({
@@ -10,7 +11,7 @@ exports.getAllUser=async(req,res,next)=>{
             users:allUsers
         }
     });
-}
+});
 
 exports.getUser =(req,res,next)=>{
     res.status(400).json({
