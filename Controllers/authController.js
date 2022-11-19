@@ -54,3 +54,16 @@ exports.login = catchAsync(async(req,res,next)=>{
     })
 
 });
+
+exports.protect = catchAsync(async(req,res,next)=>{
+    let token='';
+    if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
+            token = req.headers.authorization.split(' ')[1];
+    }
+
+    if(!token){
+        return next(new AppError('Please login to access it ',401));
+    }
+    console.log('hello world',token);
+    next();
+});
