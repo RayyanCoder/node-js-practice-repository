@@ -1,8 +1,11 @@
 const User = require('./../models/UserModel');
+const {promisify} = require('util');
 const jwt  = require('jsonwebtoken');
 const catchAsync = require('./../utils/catchAsync');
 const appError = require('./../utils/appError');
 const AppError = require('./../utils/appError');
+const { token } = require('morgan');
+
 
 
 const signToke = (id)=>{
@@ -19,14 +22,18 @@ exports.signup = catchAsync(async(req,res,next)=>{
         passwordConfirm:req.body.passwordConfirm,
     });
 
-    const token = signToke(newUsr.id);
+    // console.log(signToke(newUser.id));
+    console.log(newUser);
+
+    const token = signToke(newUser.id);
+//    const token="rr";
     res.status(201).json({
         message:'success',
         token,
         data:{
             user:newUser
         }
-    })
+    });
 
 });
 
@@ -65,5 +72,17 @@ exports.protect = catchAsync(async(req,res,next)=>{
         return next(new AppError('Please login to access it ',401));
     }
     console.log('hello world',token);
+
+    const decoded = await promisify(jwt.verify)(token,process.env.JWT_SECRET);
+    console.log("decoded data ",decoded);
+
+    const freshUser = await user.find(decoded.id);
+    if(!freshUser){
+        return next(new AppError('The token belonging to this user does not exist',401));
+    }
+
+    if(freshUser.changedPasswordAfter(decoded.iat)){
+        return next(new AppError('User recently changed password please login again',401));
+    };
     next();
 });

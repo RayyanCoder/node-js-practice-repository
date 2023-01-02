@@ -35,13 +35,24 @@ const userSchema  = new mongoose.Schema({
                 return value === this.password;
         },
         message:'Passwords do not match'
-    }
+    },
+    passwordChangedAt:Date
 }});
 
 userSchema.methods.corectPassword = async function(candidatePassword,userPassword){
     return await bcrypt.compare(candidatePassword,userPassword);
 }
 
+userSchema.methods.changedPasswordAfter = function(jwtTimeStamp){
+    if(this.passwordChangeAt){
+        console.log(this.passwordChangeAt,jwtTimeStamp);
+        const changedTimeStamp = parseInt(this.passwordChangedAt.getTime()/1000,10);
+        console.log(changedTimeStamp,jwtTimeStamp);
+        return jwtTimeStamp < changedTimeStamp;
+    }
+
+    return false;
+}
 userSchema.pre('save',async function(next){
     if(!this.isModified('password')) return next();
 
